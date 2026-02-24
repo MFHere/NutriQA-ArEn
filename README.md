@@ -17,7 +17,8 @@ The data in this dataset is collected from:
 1. Altibbi website (Q&A by medical and nutrition professionals)  
 2. Transcripts from trusted YouTube educational channels (dietitians, nutritionists, medical experts)  
 3. Reputable diet & nutrition books and scientific texts
-
+   
+![System Diagram](Fig1SourceofDataSet.png)
 ---
 
 M. F. (2025). DietNutritionQA-ArEnDataset: A Bilingual (Arabic/English) Diet & Nutrition QA Dataset. 
