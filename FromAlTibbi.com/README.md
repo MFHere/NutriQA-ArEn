@@ -1,212 +1,232 @@
-# YouTube CSV Processor — Step-by-Step Setup
+# Altibbi Medical Q&A Scraping Project: Research Documentation
 
-This project processes a list of YouTube URLs from a CSV or Excel file: it gets the transcript (Arabic subtitles or audio transcription) and generates Q&A pairs, then outputs a new XLSX with **Video_title**, **Transcript** (full subtitle or STT text), **Question**, and **Answer**.
-
-You can run it in three ways:
-- **Command line** (batch script)
-- **FastAPI** (HTTP API that accepts CSV upload)
-- **Web UI** (Streamlit app to upload a file and download the result)
+**Technical Report / Research Paper Documentation**
 
 ---
 
-## Prerequisites
+## 1. Abstract
 
-- **Python 3.10+**
-- **FFmpeg** installed and on your PATH (used for audio extraction)
-- **OpenAI API key** (for transcription and Q&A generation)
+This document describes a pipeline for collecting and analyzing Arabic medical question–answer (Q&A) data from Altibbi (الطبي), a major Arabic-language health information platform. The system scrapes questions and doctor-written answers by category, applies a temporal filter (on or after 1 August 2025), and exports structured data (XLSX) with metadata (category, date). An analysis module provides descriptive statistics, category distributions, and summary reports suitable for research use (e.g., NLP, medical QA, or health informatics studies).
+
+**Keywords:** web scraping, Arabic NLP, medical Q&A, Altibbi, health data, data collection pipeline.
 
 ---
 
-## Step 1: Create a virtual environment
+## 2. Introduction
 
-Open a terminal in the `csv_version` folder and create a venv:
+### 2.1 Background and Motivation
 
-**Windows (PowerShell):**
-```powershell
-cd csv_version
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-```
+Arabic-language medical content is valuable for research in natural language processing (NLP), medical question answering, and public health informatics. Altibbi (altibbi.com) hosts a large repository of medical questions submitted by users and answers provided by verified healthcare professionals. Systematic collection of this data enables:
 
-**Windows (Command Prompt):**
-```cmd
-cd csv_version
-python -m venv venv
-venv\Scripts\activate.bat
-```
+- Building and evaluating Arabic medical QA systems
+- Studying temporal and categorical distribution of health concerns
+- Training or fine-tuning models for Arabic medical text
 
-**Linux / macOS:**
+### 2.2 Objectives
+
+- **Data collection:** Scrape question–answer pairs from Altibbi’s public medical Q&A section.
+- **Structuring:** Store each record with fields: Question text, Answer text, Category, and Date.
+- **Temporal scope:** Restrict to questions on or after 1 August 2025 (configurable).
+- **Analysis:** Provide reproducible descriptive analysis (category counts, date range, text length, missing values) and export summary statistics.
+
+### 2.3 Scope and Limitations
+
+- Only **public** Q&A pages are accessed; no authentication or private data is used.
+- Data is collected for **research and documentation**; compliance with the site’s terms of use and robots.txt is the user’s responsibility.
+- The pipeline depends on the current HTML structure of Altibbi; structural changes may require selector updates.
+- Category labels are taken from the website; some variation (e.g., spelling or spacing) may appear across batches.
+
+---
+
+## 3. Data Source
+
+### 3.1 Platform
+
+- **Name:** Altibbi (الطبي)
+- **URL:** https://altibbi.com/اسئلة-طبية (medical questions section)
+- **Content:** User-submitted medical questions and answers written by licensed doctors.
+- **Language:** Arabic (with possible mixed script or numerals).
+
+### 3.2 Categories Covered
+
+The pipeline is configured to scrape the following categories (Arabic name and URL slug):
+
+| Category (Arabic)        | URL slug               |
+|--------------------------|------------------------|
+| تغذية                    | تغذية                  |
+| فيتامينات و معادن       | فيتامينات-و-معادن     |
+| مرض السكري               | مرض-السكري            |
+| صحة عامة                 | صحة-عامة              |
+| امراض الجهاز الهضمي      | امراض-الجهاز-الهضمي   |
+| الصحة والرياضة           | الصحة-والرياضة        |
+| اعشاب طبية               | اعشاب-طبية            |
+| ارتفاع ضغط الدم          | ارتفاع-ضغط-الدم       |
+
+*(In the merged dataset, slight variants may exist for the same conceptual category, e.g. “أمراض الجهاز الهضمي” vs “امراض الجهاز الهضمي”, or “الصحة والرياضة” vs “الصحة و الرياضة”.)*
+
+---
+
+## 4. Methodology
+
+### 4.1 Architecture Overview
+
+1. **Scraping (scrape_from_date.py):**  
+   For each category, the script iterates over listing pages, extracts links to individual Q&A pages, fetches each page, and extracts question text, answer text, and date. Records are filtered by the cutoff date and written to an XLSX file.
+
+2. **Helpers (Scriping/Helpers.py):**  
+   Reusable functions: pagination count, Q&A extraction, date extraction from listing and detail pages, CSV/XLSX-related utilities (used by the legacy CSV scraper where applicable).
+
+3. **Analysis (analyze_altibbi_xlsx.py):**  
+   Loads the produced XLSX, computes descriptive statistics (category counts, date range, text length, missing values), prints a report, and optionally exports summary tables to a second XLSX.
+
+### 4.2 Data Collection Pipeline
+
+**Step 1 – Listing pages**  
+- Base URL per category: `https://altibbi.com/اسئلة-طبية/{slug}`  
+- Pagination: `?page=0`, `?page=1`, … (total pages inferred from the pager markup).  
+- Each listing page is parsed for `<article class="new-question-item mb-20-mobile">` blocks.
+
+**Step 2 – Date from listing**  
+- Within each article, the date is read from the listing text (e.g. “20 يناير 2026”).  
+- Arabic month names are mapped to numbers; Arabic-Indic numerals (٠–٩) are normalized to 0–9.  
+- Output date format: `YYYY-MM-DD`.
+
+**Step 3 – Detail page**  
+- Each article links to a question detail page. The script follows the link and extracts:  
+  - Question: from `<div class="question-description-text">`  
+  - Answer: from `<div class="doctor-answer">`  
+- If the listing did not yield a date, the detail page can be used as fallback (if date markup is added later).
+
+**Step 4 – Filtering and storage**  
+- Records with date strictly before the cutoff (default 1 August 2025) are skipped.  
+- Each kept record is appended to an in-memory list and, at the end, written once to an XLSX file (columns: Questions, Answers, Category, Date).  
+- A configurable delay (e.g. 1 second) between detail-page requests is applied to reduce load on the server.
+
+### 4.3 Output Schema
+
+| Field      | Description                                      |
+|-----------|---------------------------------------------------|
+| Questions | Full text of the user’s question (Arabic).        |
+| Answers   | Full text of the doctor’s answer (Arabic).       |
+| Category  | Category label as shown on the site (Arabic).    |
+| Date      | Date of the Q&A in YYYY-MM-DD; empty if unknown. |
+
+### 4.4 Analysis Module
+
+The analysis script:
+
+- Loads the XLSX and normalizes column names (strip, case-insensitive match for “Category” and “Date”).
+- Computes:  
+  - Total record count  
+  - Missing value counts and percentages per column  
+  - Category value counts and percentages  
+  - Date range (min/max) and counts per month  
+  - For “Questions” and “Answers”: character and word length (min, max, mean, median)  
+- Prints a text report and can export summary sheets (Overview, Category_Counts, By_Month, Missing_Values) to an XLSX file.
+
+---
+
+## 5. Dataset Description (Example: Merged Dataset)
+
+The following describes a representative merged dataset (e.g. “altibbi_merged 24-2-26.xlsx”) produced by the pipeline.
+
+### 5.1 Category Distribution
+
+Unique categories and their counts (as of the provided analysis):
+
+| Category (Arabic)        | Count   |
+|--------------------------|--------:|
+| أمراض الجهاز الهضمي       | 42,459  |
+| تغذية                    | 20,315  |
+| مرض السكري               | 10,290  |
+| ارتفاع ضغط الدم          |  4,759  |
+| صحة عامة                 |  3,294  |
+| الصحة و الرياضة          |  1,546  |
+| امراض الجهاز الهضمي       |    588  |
+| أعشاب طبية               |    500  |
+| فيتامينات و معادن       |    215  |
+| اعشاب طبية               |     12  |
+| الصحة والرياضة           |      7  |
+| Category (header row)    |      1  |
+
+**Total records (example):** 84,986 (including one row that may be a header artifact).  
+**Number of unique category labels:** 12 (or 11 substantive categories after normalisation).
+
+**Note:** Slight spelling or spacing differences (e.g. “أمراض” vs “امراض”, “و” vs “وال”) result in multiple labels for the same conceptual category. For research, these can be normalised (e.g. mapping to a canonical list) before analysis.
+
+### 5.2 Data Quality Notes
+
+- **Date:** Filled where the listing page displayed a parseable date; otherwise the field is empty.  
+- **Category:** As on the website; recommend normalising variants for aggregated statistics.  
+- **Text:** Raw HTML has been stripped to plain text; no further cleaning is applied in the pipeline.
+
+---
+
+## 6. Software and Reproducibility
+
+### 6.1 Dependencies
+
+- Python 3.8+ (tested on 3.8; 3.9+ recommended)  
+- beautifulsoup4 ≥ 4.12.0  
+- requests ≥ 2.28.0  
+- pandas ≥ 1.5.0  
+- tqdm ≥ 4.65.0  
+- openpyxl ≥ 3.0.0  
+
+Optional for PDF generation: reportlab.
+
+### 6.2 Main Scripts and Usage
+
+**Scraping (date-filtered, XLSX output):**
 ```bash
-cd csv_version
-python3 -m venv venv
-source venv/bin/activate
+python scrape_from_date.py -o assets/output.xlsx
+python scrape_from_date.py --test   # limit to 10 records
 ```
 
-You should see `(venv)` in your prompt.
-
----
-
-## Step 2: Install dependencies
-
-With the virtual environment activated:
-
+**Analysis:**
 ```bash
-pip install -r requirements.txt
+python analyze_altibbi_xlsx.py "assets/altibbi_merged 24-2-26.xlsx" -o assets/summary.xlsx
+python analyze_altibbi_xlsx.py --categories-only   # print unique categories and counts
 ```
 
-This installs everything needed for the CLI, FastAPI backend, and Streamlit UI.
-
----
-
-## Step 3: Environment variables
-
-Create a `.env` file in the `csv_version` folder (same level as `README.md`):
-
-```env
-OPENAI_API_KEY=your_openai_api_key_here
-```
-
-Replace `your_openai_api_key_here` with your real OpenAI API key.
-
-Optional (defaults are used if not set):
-
-```env
-LLM_NAME=gpt-4o-mini
-STT_NAME=gpt-4o-mini-transcribe
-```
-
----
-
-## Step 4: Input file format
-
-Your CSV or Excel file must have a **URL column** (e.g. **`VideoURL`**, *Video URL*, or *URL*). You can optionally add a **Title** column (or *Video Title*) — that value is used as **Video_title** in the output.
-
-For **Excel files with multiple sheets**, you can choose the second sheet (e.g. in the UI: “Use second sheet”, or in the API: `?sheet=1`).
-
-Example:
-
-| VideoURL | Title (optional) |
-|----------|------------------|
-| https://www.youtube.com/watch?v=xxxxx | My Video 1 |
-| https://youtu.be/yyyyy | My Video 2 |
-
----
-
-## Step 5: Run the project
-
-### Run both backend + UI (easiest)
-
-- **Windows:** Double-click `start_backend.cmd`, then `start_frontend.cmd` (two windows). Or in PowerShell: `.\run.ps1`
-- **Linux / macOS / Git Bash:** `./run.sh` (then open http://127.0.0.1:8501). Use Ctrl+C to stop both.
-- **Check setup:** `./test_run.sh` (validates syntax, deps, and imports).
-
-### Option A — Command line (CLI)
-
-1. Activate the venv and go to `csv_version/backend`.
-2. Run:
-
+**Category list only:**
 ```bash
-python cli_main.py
+python show_categories.py
 ```
 
-When prompted, enter the path to your CSV or XLSX (or press Enter to use `../Arabic_Youtube_URLs.xlsx`). Or pass the file path directly:
+### 6.3 Repository Structure (Summary)
 
-```bash
-python cli_main.py ../Arabic_Youtube_URLs.xlsx
-```
-
-3. For **Excel files**, the CLI uses **page 2 (second sheet)** by default to read URLs and titles.
-4. Output is saved next to the input file as `*_output.xlsx` with columns **Video_title**, **Transcript**, **Question**, **Answer**.
+- `scrape_from_date.py` – Main scraper (date filter, XLSX).  
+- `analyze_altibbi_xlsx.py` – Full analysis and summary export.  
+- `show_categories.py` – List unique categories and counts.  
+- `Scriping/Helpers.py` – Shared scraping and date/text helpers.  
+- `WebScraiping.py` – Legacy CSV scraper (no date filter).  
+- `docs/` – Documentation (this file).  
+- `assets/` – Default location for input/output XLSX and summaries.
 
 ---
 
-### Option B — FastAPI backend + Web UI
+## 7. Ethical and Legal Considerations
 
-**1. Start the API server**
-
-From the `csv_version` folder (with venv activated):
-
-```bash
-cd backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-Leave this terminal open. The API will be at `http://localhost:8000`. Docs: `http://localhost:8000/docs`.
-
-**2. Start the UI**
-
-Open a **second** terminal, go to `csv_version`, activate the same venv, then run:
-
-```bash
-streamlit run app.py
-```
-
-The UI will open in your browser (usually `http://localhost:8501`).
-
-**3. Use the UI**
-
-- Upload a CSV or XLSX file with a **VideoURL** (and optional **Title**) column. For Excel with multiple sheets, check **Use second sheet** if your URLs are on sheet 2.
-- Click **Process**. The app sends the file to the API and waits for the result.
-- When finished, use **Download result XLSX** to save the output (columns: Video_title, Transcript, Question, Answer).
+- **Terms of use:** Researchers must comply with Altibbi’s terms of service and robots.txt.  
+- **Rate limiting:** The pipeline uses a delay between requests to reduce server load.  
+- **Purpose:** Data is intended for research (e.g. NLP, medical QA); no redistribution of raw content beyond permitted use should be assumed without legal review.  
+- **Anonymisation:** Questions and answers are public; no additional anonymisation is performed in the pipeline.
 
 ---
 
-## API: CSV processing endpoint
+## 8. Conclusion
 
-You can call the API directly (e.g. from scripts or Postman):
-
-- **POST** `http://localhost:8000/process-csv`
-- **Body:** form-data with a file field named `file` (your CSV or XLSX).
-- **Query (optional):** `sheet=0` (first sheet) or `sheet=1` (second sheet); ignored for CSV.
-- **Response:** the result XLSX file (columns: Video_title, Transcript, Question, Answer).
-
-Example with `curl`:
-
-```bash
-curl -X POST -F "file=@Arabic_Youtube_URLs.xlsx" -o result_output.xlsx http://localhost:8000/process-csv
-```
+This document describes an end-to-end pipeline for collecting and analyzing Arabic medical Q&A data from Altibbi. The system produces structured XLSX datasets with question, answer, category, and date, and supports descriptive analysis and summary export. The provided category distribution and dataset description can be used in research papers as a clear account of the data collection process and the resulting corpus.
 
 ---
 
-## Troubleshooting
+## References and Resources
 
-| Issue | What to do |
-|-------|------------|
-| No URL column found | Add a column named VideoURL, Video URL, or URL. |
-| CLI import errors | Run `python cli_main.py` from the `csv_version/backend` folder. |
-| `No module named 'pandas'` / `openpyxl` | Run `pip install -r requirements.txt` from `csv_version`. |
-| Audio download fails | Install FFmpeg and ensure it is on your PATH. |
-| API key errors | Check `.env` in `csv_version` and that `OPENAI_API_KEY` is set. |
-| UI cannot reach API | Start the backend first (`cd backend` then `uvicorn main:app ...`). Default UI expects API at `http://localhost:8000`. |
-| `pydantic-core` incompatible / `SystemError` on backend start | Run `pip install "pydantic-core>=2.41.5"` (or use a project venv with `pip install -r requirements.txt`). |
-| Port 8501 already in use (Streamlit) | Use another port: `streamlit run app.py --server.port 8502 --server.address 127.0.0.1`. Or close the app using 8501. |
+- Altibbi medical Q&A section: https://altibbi.com/اسئلة-طبية  
+- Project dependencies: `requirements.txt`  
+- Analysis output: `*_analysis_summary.xlsx` (Overview, Category_Counts, By_Month, Missing_Values)
 
 ---
 
-## Project layout
-
-```
-csv_version/
-├── README.md
-├── .env                     ← your API key (create it; not in git)
-├── .gitignore
-├── requirements.txt         ← pip install this (single file for all)
-├── app.py                   ← Streamlit UI
-├── run.ps1                  ← Windows: start backend + frontend
-├── run.sh                   ← Linux/macOS/Git Bash: start both
-├── test_run.sh              ← Validate setup before running
-├── start_backend.cmd        ← Windows: backend only
-├── start_frontend.cmd       ← Windows: frontend only
-└── backend/
-    ├── main.py              ← FastAPI app
-    ├── cli_main.py          ← CLI (Excel page 2 → CSV with Video_title, Q&A)
-    ├── Dockerfile           ← build from root: docker build -f backend/Dockerfile .
-    ├── models/
-    │   └── schemas.py
-    └── services/
-        ├── csv_processor.py
-        ├── qa_agent.py
-        ├── transcript.py
-        ├── youtube_extractor.py
-        └── agent_component/
-```
+*Document version: 1.0. Generated for research and reproducibility.*
