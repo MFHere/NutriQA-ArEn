@@ -1,0 +1,35 @@
+python -m venv venv
+venv/Scripts/activate
+pip install -r requirements.txt
+python src/translate_xlsx.py --input input.xlsx --output output.xlsx
+
+1
+python src/translate_xlsx.py -i input.xlsx -o out1.xlsx --start-index 0 --end-index 2999
+
+2
+python src/translate_xlsx.py -i input.xlsx -o out2.xlsx --start-index 3000 --end-index 5999
+
+3
+python src/translate_xlsx.py -i input.xlsx -o out3.xlsx --start-index 6000 --end-index 8999
+
+4
+python src/translate_xlsx.py -i input.xlsx -o out4.xlsx --start-index 9000 --end-index 11999
+
+5
+python src/translate_xlsx.py -i D:\PhD\CreateDataSet\TranslationToEnglish\dataset translation2\inputYoutube.xlsx -o outputYoutube.xlsx --start-index 0 --end-index 3000
+
+python src/translate_xlsx.py -i inputYoutube.xlsx -o outputYoutube.xlsx --start-index 0 --end-index 3000
+
+python src/translate_xlsx.py -i inputBooks.xlsx -o outputBooks.xlsx --start-index 0 --end-index 7000
+
+
+
+12:23
+
+1000 row
+
+
+200 --> 40 minutes
+87000-->x
+1000=3.3 hour
+x=17400 minutes===17400/60=209 hour

@@ -1,0 +1,52 @@
+python -m venv venv
+venv/Scripts/activate
+pip install -r requirements.txt
+python src/translate_xlsx.py --input input.xlsx --output output.xlsx
+
+1
+python src/translate_xlsx.py -i input.xlsx -o out1.xlsx --start-index 0 --end-index 2999
+
+2
+python src/translate_xlsx.py -i inputAlTibbi.xlsx -o outputAlTibbi1.xlsx --start-index 0 --end-index 10
+
+3
+python src/translate_xlsx.py -i input.xlsx -o out3.xlsx --start-index 6000 --end-index 8999
+
+4
+python src/translate_xlsx.py -i input.xlsx -o out4.xlsx --start-index 9000 --end-index 11999
+
+5
+python src/translate_xlsx.py -i D:\PhD\CreateDataSet\TranslationToEnglish\dataset translation2\inputYoutube.xlsx -o outputYoutube.xlsx --start-index 0 --end-index 3000
+
+D:\PhD\CreateDataSet\TranslationToEnglish\datasettranslation2\.venv\Scripts\python.exe src\translate_xlsx.py -i inputAlTibbi.xlsx -o outputAlTibbi1.xlsx --start-index 11 --end-index 20
+
+
+D:\PhD\CreateDataSet\TranslationToEnglish\datasettranslation2\.venv\Scripts\python.exe src\translate_xlsx.py -i InputAlTibbi-publichealth.xlsx -o outputAlTibbi-publichealth.xlsx --start-index 0 --end-index 3300
+
+D:\PhD\CreateDataSet\TranslationToEnglish\datasettranslation2\.venv\Scripts\python.exe src\translate_xlsx.py -i InputAlTibbi-Healthandsports.xlsx -o outputAlTibbi-Healthandsports.xlsx --start-index 0 --end-index 1600
+
+python src/translate_xlsx.py -i InputAlTibbi-Vitaminsandminerals.xlsx -o outputAlTibbi-Vitaminsandminerals.xlsx --start-index 0 --end-index 220
+5:00	0
+7:00	215
+	
+python src/translate_xlsx.py -i InputAlTibbi-Herbalists.xlsx -o outputInputAlTibbi-Herbalists.xlsx --start-index 0 --end-index 515
+ 
+D:\PhD\CreateDataSet\TranslationToEnglish\datasettranslation2\.venv\Scripts\python.exe src\translate_xlsx.py -i InputAlTibbi-Cardiovasculardisease.xlsx -o outputAlTibbi-Cardiovasculardisease.xlsx --start-index 0 --end-index 4770
+
+
+InputAlTibbi-publichealth
+InputAlTibbi-Cardiovasculardisease-Vitaminsandminerals
+InputAlTibbi-Vitaminsandminerals
+InputAlTibbi-
+InputAlTibbi-
+InputAlTibbi-
+
+12:23
+
+1000 row
+
+
+200 --> 40 minutes
+87000-->x
+1000=3.3 hour
+x=17400 minutes===17400/60=209 hour

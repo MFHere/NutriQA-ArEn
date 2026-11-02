@@ -1,0 +1,10 @@
+python -m venv  venv
+
+venv/Scripts/activate
+
+pip install -r requirements.txt
+
+python .\csv_version\backend\cli_main.py --file Arabic_Youtube_URLs.xlsx --limit 1
+
+TTS
+11

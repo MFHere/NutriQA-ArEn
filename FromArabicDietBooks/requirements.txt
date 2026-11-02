@@ -1,0 +1,13 @@
+mistralai
+python-dotenv
+
+langchain
+langchain-mistralai
+langchain-openai
+langchain-experimental
+langchain-text-splitters
+
+pydantic
+
+openpyxl
+tqdm

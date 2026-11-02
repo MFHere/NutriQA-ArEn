@@ -1,0 +1,54 @@
+python -m venv venv
+venv/Scripts/activate
+pip install -r requirements.txt
+python src/translate_xlsx.py --input input.xlsx --output output.xlsx
+
+1
+python src/translate_xlsx.py -i input.xlsx -o out1.xlsx --start-index 0 --end-index 2999
+
+2
+python src/translate_xlsx.py -i inputAlTibbi.xlsx -o outputAlTibbi1.xlsx --start-index 0 --end-index 10
+
+3
+python src/translate_xlsx.py -i input.xlsx -o out3.xlsx --start-index 6000 --end-index 8999
+
+4
+python src/translate_xlsx.py -i input.xlsx -o out4.xlsx --start-index 9000 --end-index 11999
+
+5
+python src/translate_xlsx.py -i D:\PhD\CreateDataSet\TranslationToEnglish\dataset translation2\inputYoutube.xlsx -o outputYoutube.xlsx --start-index 0 --end-index 3000
+
+D:\PhD\CreateDataSet\TranslationToEnglish\datasettranslation2\.venv\Scripts\python.exe src\translate_xlsx.py -i inputAlTibbi.xlsx -o outputAlTibbi1.xlsx --start-index 11 --end-index 20
+
+
+D:\PhD\CreateDataSet\TranslationToEnglish\datasettranslation2\.venv\Scripts\python.exe src\translate_xlsx.py -i InputAlTibbi-publichealth.xlsx -o outputAlTibbi-publichealth.xlsx --start-index 0 --end-index 3300
+5:00	460
+7:00	1000
+
+D:\PhD\CreateDataSet\TranslationToEnglish\datasettranslation2\.venv\Scripts\python.exe src\translate_xlsx.py -i InputAlTibbi-Healthandsports.xlsx -o outputAlTibbi-Healthandsports.xlsx --start-index 0 --end-index 1600
+5:00	0
+7:00	500
+
+
+D:\PhD\CreateDataSet\TranslationToEnglish\datasettranslation2\.venv\Scripts\python.exe src\translate_xlsx.py -i InputAlTibbi-Cardiovasculardisease.xlsx -o outputAlTibbi-Cardiovasculardisease.xlsx --start-index 0 --end-index 4770
+
+D:\PhD\CreateDataSet\TranslationToEnglish\datasettranslation2\.venv\Scripts\python.exe src\translate_xlsx.py -i InputAlTibbi-diabetes.xlsx -o outputAlTibbi-diabetes.xlsx --start-index 0 --end-index 10300
+
+python src/translate_xlsx.py -i InputAlTibbi-Feed.xlsx -o outputAlTibbi-Feed7005.xlsx --start-index 0 --end-index 7005
+python src/translate_xlsx.py -i InputAlTibbi-Feed.xlsx -o outputAlTibbi-Feed14005.xlsx --start-index 7000 --end-index 14005
+python src/translate_xlsx.py -i InputAlTibbi-Feed.xlsx -o outputAlTibbi-Feed2030.xlsx --start-index 14000 --end-index 20320
+
+D:\PhD\CreateDataSet\TranslationToEnglish\datasettranslation2\.venv\Scripts\python.exe src\translate_xlsx.py -i InputAlTibbi-Gastrointestinaldiseases.xlsx -o outputAlTibbi-Gastrointestinaldiseases.xlsx --start-index 0 --end-index 43050
+
+python src/translate_xlsx.py -i InputAlTibbi-Gastrointestinaldiseases.xlsx -o outputAlTibbi-Gastrointestinaldiseases5000.xlsx --start-index 0 --end-index 5000
+python src/translate_xlsx.py -i InputAlTibbi-Gastrointestinaldiseases.xlsx -o outputAlTibbi-Gastrointestinaldiseases10000.xlsx --start-index 5000 --end-index 10000
+python src/translate_xlsx.py -i InputAlTibbi-Gastrointestinaldiseases.xlsx -o outputAlTibbi-Gastrointestinaldiseases15000.xlsx --start-index 10000 --end-index 15000
+python src/translate_xlsx.py -i InputAlTibbi-Gastrointestinaldiseases.xlsx -o outputAlTibbi-Gastrointestinaldiseases20000.xlsx --start-index 15000 --end-index 20000
+
+python src/translate_xlsx.py -i InputAlTibbi-Gastrointestinaldiseases.xlsx -o outputAlTibbi-Gastrointestinaldiseases30333.xlsx --start-index 28430 --end-index 30009
+
+python src/translate_xlsx.py -i InputAlTibbi-Gastrointestinaldiseases.xlsx -o outputAlTibbi-Gastrointestinaldiseases40444.xlsx --start-index 37964 --end-index 40003
+
+87000-->x
+1000=3.3 hour
+x=17400 minutes===17400/60=209 hour

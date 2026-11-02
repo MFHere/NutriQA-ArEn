@@ -1,0 +1,33 @@
+# Environment and secrets
+.env
+.env.local
+*.env
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project temp and output
+backend/temp/
+Temp/
+*.log
+~$*
+
+# OS
+.DS_Store
+Thumbs.db

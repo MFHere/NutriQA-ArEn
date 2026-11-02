@@ -10,7 +10,7 @@ are not read by these commands.
 From the project directory, install the app in editable mode:
 
 ```powershell
-python -m pip install -e .
+python -m pip install -e 
 ```
 
 ## Commands

@@ -1,0 +1,6 @@
+python -m venv venv
+venv/Scripts/activate
+pip install -r requirements.txt
+python -m ocr_books.cli --pdf_path "assets\التغذية-العلاجية-الشاملة.pdf" --output_xlsx "outputs\one_book.xlsx" --use_cache
+python -m ocr_books.cli --pdf_dir "assets" --output_xlsx "outputs\all_books.xlsx" --use_cache
+
