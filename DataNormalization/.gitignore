@@ -39,4 +39,5 @@ Thumbs.db
 
 # Dataset inputs and generated outputs
 /data/
+/Audit/reviewer_sample/
 **/.nutriqa-screening-cache.sqlite3*

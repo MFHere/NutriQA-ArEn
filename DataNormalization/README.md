@@ -18,6 +18,30 @@ The lock file records a current Python 3.12.10 system environment in which CLI h
 
 ## Commands
 
+### Create reviewer samples
+
+From the `DataNormalization` directory, place the final JSON dataset at
+`data/NutriQA-ArEn-v1.json` or pass its path to the command. The JSON must
+contain the `records` array and the bilingual and source fields used by the
+pipeline. The dataset is distributed separately; it is not included in this
+repository.
+
+```powershell
+nutriqa sample --seed 42
+```
+
+The command samples without replacement within source categories: 400 Altibbi,
+100 YouTube, and 100 Books records. It fills the Ratings sheet in separate
+reviewer workbooks using `Audit/NutriQA-ArEn_Kappa_Empty.xlsx`. Both workbooks
+contain the same records and blank rating cells. The sampling manifest records
+the input checksum, seed, source counts and selected record identifiers.
+
+Outputs are written to `Audit/reviewer_sample`; existing files are not
+overwritten. Use `--output-dir` to choose another destination, `--template` to
+choose a compatible blank workbook, or `--seed` to change the selection.
+When `rowIndex` is missing, the sample uses the record's 1-based JSON position.
+Share the filled workbooks only with authorized reviewers.
+
 Convert the workbook's `Arabic Dataset` sheet to JSON. The input path is
 optional; omitting it uses `data/NutriQA-Ar.xlsx`. The output defaults to
 `data/NutriQA-Ar.json`:

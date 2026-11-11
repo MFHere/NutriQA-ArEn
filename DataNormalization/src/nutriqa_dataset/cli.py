@@ -9,6 +9,7 @@ from nutriqa_dataset.commands.clean import clean as clean_command
 from nutriqa_dataset.commands.deduplicate import app as deduplicate_app
 from nutriqa_dataset.commands.report import report as report_command
 from nutriqa_dataset.commands.screen import screen as screen_command
+from nutriqa_dataset.commands.sample import sample as sample_command
 
 _EXAMPLE_API_KEYS = {"your-api-key", "your-openai-api-key"}
 
@@ -37,3 +38,4 @@ app.add_typer(deduplicate_app, name="deduplicate")
 app.command("report")(report_command)
 app.command("screen")(screen_command)
 app.command("clean")(clean_command)
+app.command("sample")(sample_command)
