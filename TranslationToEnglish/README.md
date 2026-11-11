@@ -29,7 +29,11 @@ python src/translate_xlsx.py --input input.xlsx --output output.xlsx
 
 Optional args:
 
-- `--question-col` default `question`
-- `--answer-col` default `answer`
+- `--question-col` default `Question`
+- `--answer-col` default `Answer`
 - `--sheet` read specific sheet name or index
 - `--model` choose OpenAI model (default `gpt-3.5-turbo`)
+
+## Model and production provenance
+
+The research team reports that `gpt-3.5-turbo` was used to translate the final corpus. The script defaults to this model; set `--model` explicitly to use another. The existing `translation.log` records a failed run and does not independently document the successful production batches.

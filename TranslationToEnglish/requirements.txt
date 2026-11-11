@@ -1,5 +1,6 @@
-pandas
-openai==0.28
-python-dotenv
-openpyxl
-tqdm
+# Snapshot of the local Python 3.12.10 environment; historical production versions are not verified.
+pandas==3.0.1
+openai==0.28.0
+python-dotenv==1.2.2
+openpyxl==3.1.5
+tqdm==4.67.3

@@ -7,11 +7,14 @@ are not read by these commands.
 
 ## Install
 
-From the project directory, install the app in editable mode:
+From the project directory, install the captured runtime dependency versions and then install the app in editable mode:
 
 ```powershell
-python -m pip install -e 
+python -m pip install -r requirements.lock.txt
+python -m pip install -e . --no-deps
 ```
+
+The lock file records a current Python 3.12.10 system environment in which CLI help commands were checked; it is not a verified production environment. Building the project also requires the `hatchling` backend declared in `pyproject.toml`, which is not included in the runtime snapshot.
 
 ## Commands
 

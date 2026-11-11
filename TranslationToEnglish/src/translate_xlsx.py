@@ -4,7 +4,7 @@
 Usage:
   python src/translate_xlsx.py --input in.xlsx --output out.xlsx
 
-The script reads columns (default names: "question", "answer") and writes
+The script reads columns (default names: "Question", "Answer") and writes
 two new columns: question_en and answer_en.
 
 It reads OPENAI_API_KEY from a .env file if present.
@@ -64,7 +64,7 @@ def process_file(
     question_col: str = "Question",
     answer_col: str = "Answer",
     sheet_name: Optional[str] = None,
-    model: str = "gpt-5-nano-2025-08-07",
+    model: str = "gpt-3.5-turbo",
     start_index: int = 0,
     end_index: Optional[int] = None,
 ):
@@ -150,7 +150,7 @@ def main():
         help='Column name for answers (default: "Answer")',
     )
     parser.add_argument("--sheet", default=None, help="Sheet name or index to read")
-    parser.add_argument("--model", default="gpt-5-nano-2025-08-07", help="OpenAI model to use")
+    parser.add_argument("--model", default="gpt-3.5-turbo", help="OpenAI model to use")
     parser.add_argument(
         "--start-index",
         type=int,

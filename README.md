@@ -1,96 +1,26 @@
-# Diet Nutrition QA - Bilingual (Arabic/English) Dataset
+# NutriQA-ArEn
 
+NutriQA-ArEn is an Arabic-English nutrition question-answer dataset and its construction pipeline. The current v1 corpus contains 75,113 aligned records from Altibbi consultations, YouTube transcripts, and Arabic nutrition books. The dataset supports research and education and is not a source of medical or dietary advice.
 
-**DietNutritionQA-ArEnDataset** is a bilingual (Arabic/English) Question–Answer dataset focused on **diet and nutrition**, designed to support and advance research in Arabic NLP.
+## Pipeline and code
 
----
+The four-phase workflow combines source-specific acquisition and QA generation with shared normalization and deduplication, translation, and quality screening and cleaning:
 
-## 📘 Description
+1. **Source collection and QA construction**: [Altibbi](FromAlTibbi.com/README.md), [YouTube](FormYoutube/README.md), and [book OCR and QA generation](FromArabicDietBooks/README.md). The book workflow uses Mistral OCR (`mistral-ocr-latest`) and the `gpt-5-mini-2025-08-07` chat model by default.
+2. **Normalization and deduplication**: see [DataNormalization](DataNormalization/README.md).
+3. **Arabic-to-English translation**: see [TranslationToEnglish](TranslationToEnglish/README.md). The research team reports that `gpt-3.5-turbo` was used for the final corpus.
+4. **Screening and cleaning**: see [DataNormalization](DataNormalization/README.md) for commands and screening methods.
 
-A bilingual (Arabic/English) Diet & Nutrition QA dataset designed for real-world applications such as nutrition assistants, training domain-specific LLMs, and academic research. It provides a high-quality foundation for nutrition-focused language modeling across both Arabic and English.
+The standalone `Fig2 AltibbiYoutubeBooks.svg` reflects an earlier pipeline layout. See Figure 2 in the manuscript for the current four-phase workflow.
 
----
+Install and run each component in a separate Python environment using its own README and dependency files. Dependency snapshots describe the currently inspected component environments, not necessarily the historical production environments. The components also require external APIs and source access. Example commands in a README are not necessarily the historical production commands. Protect API keys and any source-derived sensitive data.
 
-## 📚 Sources
+## Reproducibility and release
 
-The data in this dataset is collected from:  
-1. Altibbi website (Q&A by medical and nutrition professionals)  
-2. Transcripts from trusted YouTube educational channels (dietitians, nutritionists, medical experts)  
-3. Reputable diet & nutrition books and scientific texts
-   
-![System Diagram](Fig1SourceofDataSet.png)
----
+[REPRODUCIBILITY.md](REPRODUCIBILITY.md) documents the available historical evidence, confirmed production settings, final dataset checksums, and remaining gaps. External model services and source changes may prevent identical reruns.
 
-M. F. (2025). DietNutritionQA-ArEnDataset: A Bilingual (Arabic/English) Diet & Nutrition QA Dataset. 
-Available at: https://github.com/MFHere/DietNutritionQA-ArEnDataset
-License: CC0 1.0.
-
-## 🔍 Sample QA Examples
-
-| ID        | Question (AR)                              | Answer (AR)                                                   | Question (EN)                              | Answer (EN)                                                   |
-|-----------|---------------------------------------------|----------------------------------------------------------------|---------------------------------------------|----------------------------------------------------------------|
-| item-001  | ما هي فوائد البروتين؟                      | البروتين يساعد في بناء العضلات، إصلاح الأنسجة، ودعم المناعة. | What are the benefits of protein?           | Protein helps build muscle, repair tissues, and support immunity. |
-| item-002  | ما هي الدهون الصحية؟                        | الدهون غير المشبعة مثل زيت الزيتون والأفوكادو تعتبر مفيدة.    | What are healthy fats?                      | Unsaturated fats like olive oil and avocado are considered healthy. |
-| item-003  | ما أفضل وقت لتناول وجبة بعد التمرين؟       | يفضل تناول وجبة غنية بالبروتين والكربوهيدرات خلال 30 دقيقة. | What is the best time to eat after workout? | A protein-carb meal is recommended within 30 minutes after exercise. |
-| item-004  | هل شرب الماء يساعد في فقدان الوزن؟          | نعم، يساعد في زيادة الشبع وتحسين الحرق.                      | Does drinking water help with weight loss? | Yes, it increases satiety and improves metabolic rate. |
-
-
+The v1 dataset is deposited at [Zenodo record 24086067](https://zenodo.org/records/24086067). During peer review the Excel dataset is intended for editors and reviewers through a confidential link supplied separately. The authors plan public availability at the same record after acceptance or publication. Refer to the record for the applicable release and license information.
 
 ## Citation
-If you find these codes or data useful, please consider citing our paper as:
-<br>
-```
-@dataset{DietNutriQA_AREN_2025,
-  title     = {DietNutriQA-AREN: A Bilingual (Arabic/English) Diet & Nutrition QA Dataset},
-  author    = {M. F.},
-  year      = {2025},
-  url       = {https://github.com/MFHere/DietNutritionQA-ArEnDataset},
-  note      = {Creative Commons Zero v1.0 Universal (CC0)}
-}
-```
 
-
-
-git clone https://github.com/MFHere/DietNutritionQA-ArEnDataset.git
-
-## 🧪 Contribution
-
-Contributions are welcome! If you want to:
-
-  * Add more QA pairs
-  
-  * Propose corrections
-  
-  * Submit pull requests
-
-Please follow the standard GitHub workflow. Make sure new entries follow the same JSONL schema.
-
-## 🧱 Dataset Structure
-
-```text
-DietNutritionQA-ArEnDataset/
-├── data/
-│   ├── train.jsonl
-│   ├── valid.jsonl
-│   └── test.jsonl
-├── docs/
-│   └── data_schema.md
-└── LICENSE
-```
-
-## ⚠️ Disclaimer
-
-This dataset is for research and educational purposes only. It is not a substitute for professional medical or dietary advice. Always consult a qualified health professional for personalized nutrition guidance.
-
-
-Thank you for using DietNutritionQA-ArEnDataset — your research and feedback are highly appreciated!
-
-<p align="center">
-  <img src="https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg" />
-  <img src="https://img.shields.io/badge/Language-AR%2FEN-green" />
-  <img src="https://img.shields.io/badge/Dataset_Type-QA-blue" />
-  <img src="https://img.shields.io/badge/Domain-Diet%20%26%20Nutrition-orange" />
-</p>
-
-
- 
+Cite the associated NutriQA-ArEn manuscript and the version-specific Zenodo dataset record when they are available.

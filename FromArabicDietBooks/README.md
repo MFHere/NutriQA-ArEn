@@ -27,13 +27,13 @@ OPENAI_API_KEY=...
 Single PDF:
 
 ```bash
-python -m ocr_books.cli --pdf_path "C:\path\to\file.pdf" --output_xlsx "outputs\qa.xlsx" --llm_model "gpt-5.2-mini" --use_cache
+python -m ocr_books.cli --pdf_path "C:\path\to\file.pdf" --output_xlsx "outputs\qa.xlsx" --llm_model "gpt-5-mini-2025-08-07" --use_cache
 ```
 
 Folder of PDFs (recursive):
 
 ```bash
-python -m ocr_books.cli --pdf_dir "C:\path\to\pdfs" --output_xlsx "outputs\qa.xlsx" --llm_model "gpt-5.2-mini" --use_cache
+python -m ocr_books.cli --pdf_dir "C:\path\to\pdfs" --output_xlsx "outputs\qa.xlsx" --llm_model "gpt-5-mini-2025-08-07" --use_cache
 ```
 
 ### Cost control flags
